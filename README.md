@@ -1,16 +1,35 @@
-# covid19_translate
-<<<<<<< HEAD
+# COVID19 Translation
 
-Translate web pages from other languages into Japanese
 =======
-Translate web pages from other languages into Japanese.
->>>>>>> 99e34d04171c384970acc0766e0d3d06c6dacb29
 
-For filter function please refer to filter_function_sample.py
+## General information
 
-We added several new languages that is not reflected in the files. (Other parts are the same).
+Translate web pages related to COVID-19 from other languages into Japanese
 
-Target languages (regions):
-日(jp), 中(cn), 米(us), 仏(fr), 西(es), 独(de), 韓(kr), 印(in), 他(int, eu)
+### Target regions:
+
+Japan, China, Korea, India, America, France, Germany, Spain, Others (International, Europe)
+
+### Target languages:
+
+Japanese, English, Chinese, Korean, French, German, Spanish
+
+
+## extract_text.py
+
+Extract newest htmls of each websites.
+
+## translate.py
+
+Translate web pages related to COVID-19 from other languages into Japanese
+
+
+## twitter_translate.py
+
+Translate twitters in other languages into Japanese
+
+## filter_function_sample.py
+
+An example of keyword filtering function.
 
 
