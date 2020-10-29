@@ -1,0 +1,76 @@
+コロナ	Corona	电晕	코로나	Corona	Corona.	Corona
+COVID	COVID	COVID	COVID	COVID	COVID	COVID
+ＣＯＶＩＤ	COVID	COVID	COVID	COVID	COVID	COVID
+肺炎	Pneumonia	肺炎	폐렴	Pneumonie	Pneumonie	Neumonía
+PCR	PCR	PCR	PCR	PCR	PCR	PCR
+ＰＣＲ	PCR	PCR	PCR	PCR	PCR	PCR
+マスク	Mask	遮罩	마스크	Masque	Maske	Máscara
+感染	Infection	感染	감염	Infection	Infektion	Infección
+濃厚接触	Close contact	密切接触	농후 접촉	Contact riche	Enge Kontakte	Contacto estrecho
+医療崩壊	Collapse of medical care	医疗崩溃	의료 붕괴	Déchéance médicale	Gesundheitswesen	Colapso médico
+抗体検査	Antibody test	抗体检测	항체 검사	Épreuve de l'anticorps	Antikörpertest	Prueba de anticuerpo
+抗原検査	Antigen test	抗原检测	항원 검사	Épreuve de l'antigène	Antigentests	Prueba de antígeno
+パンデミック	Pandemic	流行病	팬더믹	Pandémie	Pandemie	Pandemia
+オーバーシュート	Overshoot	过冲	오버 슈트	Dépassement	Überspannen	Overshot
+ソーシャルディスタンス	Social distance	社交距离	소셜디스탠스	Distance sociale	Soziologie	Distancia social
+テレワーク	Telework	远程作业	텔레워크	Télétravail	Telearbeit	Teletrabajo
+テレカン	Telecan	テレカン	テレカン	Catégorie : Telecan	テレカン	Tekan
+テレ会議	Teleconferencing	远程会议	텔레회의	Téléconférence	Telekonferenzen	Teleconferencia
+テレ講義	Telelecture	远程讲解	텔레강강	Téléconférences	Televortrag	Teleconferencia
+テレ授業	Tele-class	远程教学	텔레수업	Téléclasse	Telekurs	Teleclase
+テレ診察	Teleconsultation	遥测检查	텔레 진찰	Examen médical	Teleuntersuchung	Telediagnosis
+リモートワーク	Remote work	远程工作	원격작업	Travail à distance	Remote-	Trabajo remoto
+リモート会議	Remote conference	远程会议	원격회의	Conférence à distance	Remotekonferenzen	Conferencia remota
+リモート講義	Remote lecture	远程教学	원격강의	Conférence à distance	Remote-Lernangebote	Conferencia remota
+リモート授業	Remote class	远程教学	원격 수업	Classe distante	Remote-Schulung	Clases remotas
+リモート診察	Remote examination	远程检查	원격 진찰	Examen à distance	Remote-Untersuchung	Examen remoto
+オンライン会議	Online conference	在线会议	온라인 회의	Conférence en ligne	Onlinebesprechung	Reunión en línea
+オンライン講義	Online lecture	在线授课	온라인 강의	Conférences en ligne	Online-Vorlesung	Conferencias en línea
+オンライン授業	Online class	在线授课	온라인 수업	Cours en ligne	Online-Schulung	Clases en línea
+オンライン診察	Online examination	在线检查	온라인 진찰	Examen en ligne	Online-Untersuchung	Examen en línea
+緊急事態宣言	Emergency declaration	紧急事态宣言	긴급사태 선언	Déclaration d'urgence	Notfall	Declaración de emergencia
+ロックダウン	Lockdown	锁定	락다운	Verrouillage	Sperren	Bloqueo
+都市封鎖	Urban blockade	城市封锁	도시 봉쇄	Blocus urbains	Stadtsperren	Bloqueo urbano
+自粛	Self-restraint	自肃	자제	Autodiscipline	Koreanisch	Restricción
+給付金	Benefit	补助金	급부금	Prestations	Leistungen	Beneficios
+助成金	Grant	补助金	조성금	Subventions	Mittel	Subvención
+ＣＯＶＩＤ	COVID	COVID	COVID	COVID	COVID	COVID
+肺炎	Pneumonia	肺炎	폐렴	Pneumonie	Pneumonie	Neumonía
+PCR	PCR	PCR	PCR	PCR	PCR	PCR
+ＰＣＲ	PCR	PCR	PCR	PCR	PCR	PCR
+マスク	Mask	遮罩	마스크	Masque	Maske	Máscara
+感染	Infection	感染	감염	Infection	Infektion	Infección
+濃厚接触	Close contact	密切接触	농후 접촉	Contact riche	Enge Kontakte	Contacto estrecho
+医療崩壊	Collapse of medical care	医疗崩溃	의료 붕괴	Déchéance médicale	Gesundheitswesen	Colapso médico
+抗体検査	Antibody test	抗体检测	항체 검사	Épreuve de l'anticorps	Antikörpertest	Prueba de anticuerpo
+抗原検査	Antigen test	抗原检测	항원 검사	Épreuve de l'antigène	Antigentests	Prueba de antígeno
+パンデミック	Pandemic	流行病	팬더믹	Pandémie	Pandemie	Pandemia
+オーバーシュート	Overshoot	过冲	오버 슈트	Dépassement	Überspannen	Overshot
+ソーシャルディスタンス	Social distance	社交距离	소셜디스탠스	Distance sociale	Soziologie	Distancia social
+テレワーク	Telework	远程作业	텔레워크	Télétravail	Telearbeit	Teletrabajo
+テレカン	Telecan	テレカン	テレカン	Catégorie : Telecan	テレカン	Tekan
+テレ会議	Teleconferencing	远程会议	텔레회의	Téléconférence	Telekonferenzen	Teleconferencia
+テレ講義	Telelecture	远程讲解	텔레강강	Téléconférences	Televortrag	Teleconferencia
+テレ授業	Tele-class	远程教学	텔레수업	Téléclasse	Telekurs	Teleclase
+テレ診察	Teleconsultation	遥测检查	텔레 진찰	Examen médical	Teleuntersuchung	Telediagnosis
+リモートワーク	Remote work	远程工作	원격작업	Travail à distance	Remote-	Trabajo remoto
+リモート会議	Remote conference	远程会议	원격회의	Conférence à distance	Remotekonferenzen	Conferencia remota
+リモート講義	Remote lecture	远程教学	원격강의	Conférence à distance	Remote-Lernangebote	Conferencia remota
+リモート授業	Remote class	远程教学	원격 수업	Classe distante	Remote-Schulung	Clases remotas
+リモート診察	Remote examination	远程检查	원격 진찰	Examen à distance	Remote-Untersuchung	Examen remoto
+オンライン会議	Online conference	在线会议	온라인 회의	Conférence en ligne	Onlinebesprechung	Reunión en línea
+オンライン講義	Online lecture	在线授课	온라인 강의	Conférences en ligne	Online-Vorlesung	Conferencias en línea
+オンライン授業	Online class	在线授课	온라인 수업	Cours en ligne	Online-Schulung	Clases en línea
+オンライン診察	Online examination	在线检查	온라인 진찰	Examen en ligne	Online-Untersuchung	Examen en línea
+緊急事態宣言	Emergency declaration	紧急事态宣言	긴급사태 선언	Déclaration d'urgence	Notfall	Declaración de emergencia
+ロックダウン	Lockdown	锁定	락다운	Verrouillage	Sperren	Bloqueo
+都市封鎖	Urban blockade	城市封锁	도시 봉쇄	Blocus urbains	Stadtsperren	Bloqueo urbano
+自粛	Self-restraint	自肃	자제	Autodiscipline	Koreanisch	Restricción
+給付金	Benefit	补助金	급부금	Prestations	Leistungen	Beneficios
+助成金	Grant	补助金	조성금	Subventions	Mittel	Subvención
+補助金	Subsidy	补助金	보조금	Subvention	Subventionen	Subvención
+設備導入	Introduction of equipment	设备引进	설비 도입	Introduction d'installations	Einrichtung	Instalación de equipo
+協力金	Cooperative fund	合作资金	협력금	Coopérative	Kooperation	Dinero de cooperación
+データダイエット	Data diet	资料简化	데이터 다이어트	Régime alimentaire	Datenbeschleunigung	Dieta de datos
+国内パスポート	Domestic passport	国内护照	국내 여권	Passeport national	Internationaler Pass	Pasaporte doméstico
+東京アラート	Tokyo alert	东京警报	도쿄 경보	Alerte de Tokyo	Tokio Warnung	Alerta de Tokio
