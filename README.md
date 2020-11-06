@@ -1,7 +1,5 @@
 # COVID19 Translation
 
-=======
-
 ## General information
 
 Translate web pages related to COVID-19 from other languages into Japanese
@@ -22,7 +20,6 @@ Extract newest htmls of each websites.
 ## translate.py
 
 Translate web pages related to COVID-19 from other languages into Japanese
-
 
 ## twitter_translate.py
 
