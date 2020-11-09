@@ -17,52 +17,98 @@ import requests as req
 from requests_oauthlib import OAuth1
 from xml.etree.ElementTree import *
 
+from elastic_search_utils import ElasticSearchImporter
+
+
+# input arguments
+account_index = int(sys.argv[1])
+tolang = sys.argv[2]
+
 # constant
-source_langs = ["cn", "es", "eu", "us", "int", 'in', "kr", "jp", "de", "fr"]
+source_langs = ["jp", "cn", "br", "kr", "es", "eu", "us", "int", 'in', "de", "fr", "au", 'za']
+map_to_lang = {"jp":"ja", "en":"en", "eu":"en", "us":"en", "int":"en", "in":"en", "au":"en", 'za':'en'}
 source_langs_ori = source_langs
 parent_folder = '/mnt/hinoki/share/covid19/html'
 log_folder = '/mnt/hinoki/share/covid19/run/new-translated-files'
-accessed_file_list = '/mnt/hinoki/share/covid19/run/trans_log_song/trans_list.txt' 
+en_accessed_file_list = '/mnt/hinoki/share/covid19/run/trans_log_song/en_trans_list.txt' 
+ja_accessed_file_list = '/mnt/hinoki/share/covid19/run/trans_log_song/trans_list.txt' 
+
 accessed_file_list_tmp = '/mnt/hinoki/share/covid19/run/trans_log_song/trans_list_tmp.txt' 
 tmp_list = '/mnt/hinoki/share/covid19/run/trans_log_song/extract_list.txt' 
+log_file_base_lang = ''
+elastic_log = '/mnt/hinoki/share/covid19/run/trans_log_song/elastic_log.txt'
+
 
 # translation settings
 NAME1 = 
 KEY1=
 SECRET1=
 
-NAME2 =
-KEY2 =
-SECRET2 =
-
-NAME3 =
-KEY3 =
-SECRET3 =
-
-account_list = [ (NAME1, KEY1, SECRET1), (NAME2, KEY2, SECRET2), (NAME3, KEY3, SECRET3)]
+account_list = [ (NAME1, KEY1, SECRET1), (NAME2, KEY2, SECRET2), (NAME3, KEY3, SECRET3), (NAME4, KEY4, SECRET4), (NAME5, KEY5, SECRET5), (NAME6, KEY6, SECRET6)]
 account_len = len(account_list)
-account_index = int(sys.argv[1])
 
 NAME, KEY, SECRET = account_list[account_index] 
 #source_langs = [source_langs[account_index]]
 if (account_index == 0):
-    source_langs = source_langs[:-2]
+    source_langs = source_langs[0:3]
 elif (account_index == 1):
-    source_langs = source_langs[:-2]
+    source_langs = source_langs[3:9]
 elif (account_index == 2):
+    source_langs = source_langs[9:-2]
+elif (account_index == 3):
     source_langs = source_langs[-2:]
+elif (account_index == 4):
+    source_langs = source_langs[0:6]
+elif (account_index == 5):
+    source_langs = source_langs[6:]
 print (source_langs)
 
 consumer = OAuth1(KEY, SECRET)
+
+# anylang -> Ja
 En_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_en_ja/'
 #Zh_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_zh-CN_ja/'
-Zh_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalN_zh-CN_ja/'
-Ko_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/patentN_ko_ja/'
-Fr_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalN_fr_ja/'
-Es_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalN_es_ja/'
-De_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalN_de_ja/'
-URLs = {"en":En_Ja_URL, "eu":En_Ja_URL, "us":En_Ja_URL, "int":En_Ja_URL, "zh":Zh_Ja_URL, "cn":Zh_Ja_URL, "kr":Ko_Ja_URL, "fr":Fr_Ja_URL, "es": Es_Ja_URL, "de": De_Ja_URL, 'in': En_Ja_URL}
+Zh_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_zh-CN_ja/'
+Ko_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_ko_ja/'
+Fr_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_fr_ja/'
+Es_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_es_ja/'
+De_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_de_ja/'
+Pt_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_pt_ja/'
 
+# anylang -> En
+Ja_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_ja_en/'
+Zh_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_zh-CN_en/'
+Ko_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_ko_en/'
+Fr_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_fr_en/'
+Es_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_es_en/'
+De_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_de_en/'
+Pt_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_pt_en/'
+
+# anylang -> Ja
+# Ja -> is not needed
+Ja_URLs = {'za': En_Ja_URL, "au":En_Ja_URL, "br":Pt_Ja_URL, "en":En_Ja_URL, "eu":En_Ja_URL, "us":En_Ja_URL, "int":En_Ja_URL, "zh":Zh_Ja_URL, "cn":Zh_Ja_URL, "kr":Ko_Ja_URL, "fr":Fr_Ja_URL, "es": Es_Ja_URL, "de": De_Ja_URL, 'in': En_Ja_URL}
+
+# anylang -> En
+# za, au, en, eu, us, int, in is not needed
+En_URLs = {"jp": Ja_En_URL, "br":Pt_En_URL, "cn":Zh_En_URL, "kr":Ko_En_URL, "fr":Fr_En_URL, "es": Es_En_URL, "de": De_En_URL}
+
+# elastic search
+#es_host = 'basil201'
+es_host = 'basil501'
+es_port = 9200
+es_ja_index = 'covid19-pages-ja'
+es_en_index = 'covid19-pages-en'
+es_index = ''
+html_dir = "/mnt/hinoki/share/covid19/html"
+test_file = '/mnt/hinoki/share/covid19/html/jp/ja_translated/hazard.yahoo.co.jp/c-emg.yahoo.co.jp/notebook/contents/pickup/coronaevac.html/2020/08/26-03-11/coronaevac.txt'
+es_ja_importer = ElasticSearchImporter(es_host, es_port, html_dir, 'ja', logger=None)
+es_en_importer = ElasticSearchImporter(es_host, es_port, html_dir, 'en', logger=None)
+if (tolang == 'ja'):
+    es_importer = es_ja_importer
+    es_index = es_ja_index
+elif (tolang == 'en'):
+    es_importer = es_en_importer
+    es_index = es_en_index
 
 # utilities
 year_month_day_hour_pattern = re.compile(".*?/(\d\d\d\d)/(\d\d)/(\d\d)-(\d\d).*")
@@ -103,11 +149,12 @@ def get_lang(input_path):
             return lang
     return None
 
-def cut_parts(input_text):
+def cut_parts(input_text) -> Tuple[List[List[str]], int]:
     """
         cut input_text into shorter parts
     """
     lines = input_text.split('\n')
+    line_num = len(lines)
     parts = []
     part = ""
     for line in lines:
@@ -121,7 +168,7 @@ def cut_parts(input_text):
     if (len(part)>0):
         part = part.strip()
         parts.append(part)
-    return parts
+    return parts, line_num
 
 def tmp2source(tmp_name):
     source_name = tmp_name.replace("/tmp/","/orig/",1)
@@ -134,17 +181,17 @@ def source2tmp(tmp_name):
     return source_name
 
 def source2target(tmp_name):
-    source_name = tmp_name.replace("/orig/","/ja_translated/",1)
+    source_name = tmp_name.replace("/orig/","/{}/".format(loc_phrase),1)
     source_name = str(Path(source_name).with_suffix(".html"))
     return source_name
 
 def tmp2target(tmp_name):
-    target_name = tmp_name.replace("/tmp/","/ja_translated/",1)
+    target_name = tmp_name.replace("/tmp/","/{}/".format(loc_phrase),1)
     target_name = str(Path(target_name).with_suffix(".txt"))
     return target_name
 
 def ja_translate2source(name):
-    target_name = name.replace("/ja_translated/","/orig/",1)
+    target_name = name.replace("/{}/".format(loc_phrase),"/orig/",1)
     target_name = str(Path(target_name).with_suffix(".html"))
     return target_name
 
@@ -182,7 +229,7 @@ def get_accessed_files(accessed_file_list):
 def read_ja_translated_folder(parent_folder):
     all_names = []
     for lang in source_langs: 
-        search_path = "{}/{}/ja_translated/**/*.html".format(parent_folder, lang)
+        search_path = "{}/{}/{}/**/*.html".format(parent_folder, lang, loc_phrase)
         names_of_lang = glob.glob(search_path, recursive=True)
         names_of_lang = [name for name in names_of_lang if os.path.isfile(name)] 
         for name in names_of_lang:
@@ -190,7 +237,7 @@ def read_ja_translated_folder(parent_folder):
     return all_names
 
 def new_tmp(name):
-    target_name = name.replace("/ja_translated/","/ja_translated_tmp/",1)
+    target_name = name.replace("/{}/".format(loc_phrase),"/{}_tmp/".format(loc_phrase),1)
     target_name = str(Path(target_name).with_suffix(".txt"))
     return target_name
 
@@ -248,6 +295,9 @@ def get_unaccessed_tmp_content(parent_folder):
     return unaccessed_tmp
 
 def get_unaccessed_tmp_with_lang_site_limit(parent_folder, lang, limit_num) -> List[str]:
+    # all tmp: extracted
+    # accessed: (en_)trans_list.txt
+    # unaccessed: tmp - accessed -> filter
     lang_pattern = "{}/{}".format(parent_folder, lang)
     site_pattern = "{}/{}/.*?/(.*?)/.*".format(parent_folder, lang)
     site_pattern = re.compile(site_pattern)
@@ -260,6 +310,7 @@ def get_unaccessed_tmp_with_lang_site_limit(parent_folder, lang, limit_num) -> L
         accessed_files_dic[name[0]]=1
     unaccessed_tmp = [name for name in all_tmp_content if accessed_files_dic.get(name, 0) == 0]
     unaccessed_tmp = [str(Path(source2tmp(name)).with_suffix(".title_main")) for name in unaccessed_tmp]
+    unaccessed_tmp.reverse()
 
     filtered_tmp = []
     site_num = {}
@@ -275,7 +326,8 @@ def get_unaccessed_tmp_with_lang_site_limit(parent_folder, lang, limit_num) -> L
     
 
 def translator_part(input_part, lang):
-    if (lang == 'jp'):
+    current_lang = map_to_lang.get(lang, lang)
+    if (current_lang == tolang):
         return input_part
 
     global KEY, NAME, SECRET, account_index, account_len, consumer
@@ -295,24 +347,25 @@ def translator_part(input_part, lang):
         #original_sentence = result['request']['text']
         translated_sentence = result['result']['text']
         return translated_sentence
-    except Exception as e:
-        print ("Error from Minhon:")
-        print('type:' + str(type(e)))
-        print('args:' + str(e.args))
-        print('e:' + str(e))
+    except:
+        print ("Error from Minhon")
         print (lang)
-        sleep(1500)
+        time.sleep(1500)
         return '' 
 
-def translate_one(tmp_content, lang):
+def translate_one(tmp_content, lang) -> Tuple[str, int]:
+    # lang here means region actually...
     with open(tmp_content, "r") as f:
         input_text = f.read()
-    input_parts = cut_parts(input_text)
+    input_parts, line_num = cut_parts(input_text)
+    current_lang = map_to_lang.get(lang, lang)
+    if (current_lang != tolang and line_num > 500):
+        return '', 7
     output_parts = []
     for part in input_parts:
         output_parts.append(translator_part(part, lang))
     output_text = ''.join(output_parts)
-    return output_text
+    return output_text, 0
 
 def save_result(output_text, target_txt):
     target_html = str(Path(target_txt).with_suffix(".html"))
@@ -323,9 +376,22 @@ def save_result(output_text, target_txt):
 
     save_path_directory = os.path.dirname(target_txt)
     if (os.path.exists(save_path_directory) == False):
-        os.makedirs(save_path_directory)
+        try:
+            os.makedirs(save_path_directory)
+        except:
+            return 6
     with open(target_txt, "w") as f:
         f.write(output_text)
+
+    output_line = ''
+    try:
+        #update_record(self, input_file, index, is_data_stream=False)
+        res = es_importer.update_record(target_txt, index=es_index)
+        output_line = "{} {}".format(target_txt.strip(), res)
+    except:
+        output_line = "{} {}".format(target_txt.strip(), 'error')
+    with open(elastic_log, "a+") as f:
+        f.write(output_line+'\n')
 
     output_html = text_to_html(output_text)
     with open(target_html, "w") as f:
@@ -349,6 +415,11 @@ def write_to_accessed(unaccessed_tmp_content):
             line = "{} {} {}".format(source_html, lang, status)
             f.write(line.strip()+'\n')
 
+def write_to_accessed_line(source_html, lang, status):
+    with open(accessed_file_list, "a+") as f:
+        line = "{} {} {}".format(source_html, lang, status)
+        f.write(line.strip()+'\n')
+
 def translate_all(unaccessed_tmp_content):
     global parent_folder
     for tmp_content in unaccessed_tmp_content:
@@ -357,62 +428,67 @@ def translate_all(unaccessed_tmp_content):
         source_html = tmp2source(tmp_content)
         lang = get_lang(source_html)
         target_txt = tmp2target(tmp_content)
+        print ("Input: {}".format(tmp_content))
+
         if (os.path.exists(target_txt)):
+            print ("exists")
+            write_to_accessed_line(source_html, lang, 5)
             continue
 
         if (has_all_file(tmp_content) == 0):
-            status = 4
-            with open(accessed_file_list, "a+") as f:
-                line = "{} {} {}".format(source_html, lang, status)
-                f.write(line.strip()+'\n')
+            print ("no all file")
+            write_to_accessed_line(source_html, lang, status=4)
             continue
 
         with open(tmp_meta, "r") as f:
             try:
                 line = f.readlines()[0].strip()
             except:
-                status = 4
-                with open(accessed_file_list, "a+") as f:
-                    line = "{} {} {}".format(source_html, lang, status)
-                    f.write(line.strip()+'\n')
+                print ("no meta")
+                write_to_accessed_line(source_html, lang, status=4)
                 continue
             translated_flag, timestamp, lang, content_num, link_num, keyword_flag = line.split(' ')
             translated_flag = int(translated_flag)
             timestamp = float(timestamp)
             content_num = int(content_num)
             link_num = int(link_num)
-            if (keyword_flag == "False"):
-                keyword_flag = 0
-            else:
-                keyword_flag = 1
+            keyword_flag = (keyword_flag != "False")
 
-        status = 0 # 0:ok 1: no keyword 2: too many links 3: others
+        status = 0 # 0:ok 1: no keyword 2: too many links 3: others 4: not all files 5: exists 6: no permission
         if (keyword_flag == 0):
             status = 1
+            print ("no keyword")
+            #print (tmp_content)
+            write_to_accessed_line(source_html, lang, status)
+            continue
+        #elif (float(content_num+1)/float(content_num+link_num+1)<0.33):
         elif (float(content_num+1)/float(content_num+link_num+1)<0.2):
             status = 2
-        else:
-            status = 0
+            print ("many links")
+            #print (tmp_content)
+            write_to_accessed_line(source_html, lang, status)
 
         if (status == 0):
-            output_text = translate_one(tmp_content, lang)
+            output_text, status = translate_one(tmp_content, lang)
+            if (status == 7):
+                print ("file too long")
+                write_to_accessed_line(source_html, lang, status)
+                continue
             status = save_result(output_text, target_txt)
+            if (status == 6):
+                print ("no permission")
+                write_to_accessed_line(source_html, lang, status)
+                continue
 
+            write_to_accessed_line(source_html, lang, status)
+            target_html = str(Path(target_txt).with_suffix(".html"))
             year, month, day, hour, minute = my_get_time()
             minute = 0
-            log_file_base = "new-html-files-{:04d}-{:02d}-{:02d}-{:02d}-{:02d}.txt".format(year, month, day, hour, minute)
+            log_file_base = "{}-{:04d}-{:02d}-{:02d}-{:02d}-{:02d}.txt".format(log_file_base_lang, year, month, day, hour, minute)
             log_file  = "{}/{}".format(log_folder, log_file_base)
             with open(log_file, "a+") as f:
-                f.write(target_txt.strip()+'\n')
-
-
-
-        with open(accessed_file_list, "a+") as f:
-            line = "{} {} {}".format(source_html, lang, status)
-            f.write(line.strip()+'\n')
-        
-        if (status == 0):
-            print ("Input: {}\nOutput: {}".format(tmp_content, target_txt))
+                f.write(target_html.strip()+'\n')
+            print ("Output: {}".format(target_txt))
 
 def revise_meta(parent_folder):
     keyword_false = 0
@@ -469,6 +545,18 @@ def has_all_file(tmp):
         return 0
 
 
+if (tolang == 'ja'):
+    accessed_file_list = ja_accessed_file_list
+    URLs = Ja_URLs
+    loc_phrase = "ja_translated"
+    log_file_base_lang = "new-translated-files"
+elif (tolang == 'en'):
+    accessed_file_list = en_accessed_file_list
+    URLs = En_URLs
+    loc_phrase = "en_translated"
+    log_file_base_lang = "new-translated-files-en"
+
+print (tolang, accessed_file_list)
 max_trans_page = 1000 
 epoch_trans_page = 100 
 limit_each_site = 5 # in each iteration translate only 10
@@ -494,4 +582,4 @@ while (1):
         
         translate_all(unaccessed_tmp_content)
 
-    time.sleep(10)
+    time.sleep(1)
