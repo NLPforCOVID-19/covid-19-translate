@@ -14,15 +14,14 @@ def datetime_from_iso_format(str_timestamp):
 
 class ElasticSearchImporter:
 
-    def __init__(self, host, port, index, html_dir, lang, logger=None):
-        self.index = index
+    def __init__(self, host, port, html_dir, lang, logger=None):
         self.html_dir = html_dir
         self.lang = lang
         self.logger = logger
 
         self.es = Elasticsearch([f'http://{host}:{port}'], use_ssl=False)
 
-    def update_record(self, input_file):
+    def update_record(self, input_file, index, is_data_stream=False):
         "Import a page into Elastic Search database."
         "Returns the record_id if the page has been successfully imported."
         "None otherwise."
@@ -52,8 +51,8 @@ class ElasticSearchImporter:
         record_id = "/".join([region, domain, path, filename])
 
         must_index_record = False
-        if (self.es.exists(index=self.index, id=record_id)):
-            index_record = self.es.get(index=self.index, id=record_id)
+        if (self.es.exists(index=index, id=record_id)):
+            index_record = self.es.get(index=index, id=record_id)
             index_record_timestamp_str = index_record['_source']['timestamp']['local']
             if self.logger is not None:
                 self.logger.debug(f"index_record={index_record}")
@@ -105,11 +104,13 @@ class ElasticSearchImporter:
                 'filename': filename,
                 'url': url
             }
+            if is_data_stream:
+                record['@timestamp'] = timestamp_utc
 
             if self.logger is not None:
                 self.logger.debug(f"ES Record: id={record_id} content={record}")
             try:
-                res = self.es.index(index=self.index, id=record_id, body=record)
+                res = self.es.index(index=index, id=record_id, body=record, op_type="create" if is_data_stream else "index")
                 if self.logger is not None:
                     self.logger.debug(f"Response for es.index(id={record_id}) -> {res}")
             except TransportError as te:
