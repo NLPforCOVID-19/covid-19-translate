@@ -40,9 +40,6 @@ elastic_log = '/mnt/hinoki/share/covid19/run/trans_log_song/elastic_log.txt'
 
 
 # translation settings
-NAME1 = 
-KEY1=
-SECRET1=
 
 account_list = [ (NAME1, KEY1, SECRET1), (NAME2, KEY2, SECRET2), (NAME3, KEY3, SECRET3), (NAME4, KEY4, SECRET4), (NAME5, KEY5, SECRET5), (NAME6, KEY6, SECRET6)]
 account_len = len(account_list)
@@ -98,7 +95,10 @@ es_host = 'basil501'
 es_port = 9200
 es_ja_index = 'covid19-pages-ja'
 es_en_index = 'covid19-pages-en'
+es_ja_doc_index = 'covid19-docs-ja'
+es_en_doc_index = 'covid19-docs-en'
 es_index = ''
+es_doc_index = ''
 html_dir = "/mnt/hinoki/share/covid19/html"
 test_file = '/mnt/hinoki/share/covid19/html/jp/ja_translated/hazard.yahoo.co.jp/c-emg.yahoo.co.jp/notebook/contents/pickup/coronaevac.html/2020/08/26-03-11/coronaevac.txt'
 es_ja_importer = ElasticSearchImporter(es_host, es_port, html_dir, 'ja', logger=None)
@@ -106,9 +106,11 @@ es_en_importer = ElasticSearchImporter(es_host, es_port, html_dir, 'en', logger=
 if (tolang == 'ja'):
     es_importer = es_ja_importer
     es_index = es_ja_index
+    es_doc_index = es_ja_doc_index
 elif (tolang == 'en'):
     es_importer = es_en_importer
     es_index = es_en_index
+    es_doc_index = es_en_doc_index
 
 # utilities
 year_month_day_hour_pattern = re.compile(".*?/(\d\d\d\d)/(\d\d)/(\d\d)-(\d\d).*")
@@ -387,6 +389,7 @@ def save_result(output_text, target_txt):
     try:
         #update_record(self, input_file, index, is_data_stream=False)
         res = es_importer.update_record(target_txt, index=es_index)
+        res = es_importer.update_record(target_txt, index=es_doc_index, is_data_stream=True)
         output_line = "{} {}".format(target_txt.strip(), res)
     except:
         output_line = "{} {}".format(target_txt.strip(), 'error')
