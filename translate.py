@@ -25,8 +25,8 @@ account_index = int(sys.argv[1])
 tolang = sys.argv[2]
 
 # constant
-source_langs = ["jp", "cn", "br", "kr", "es", "eu", "us", "int", 'in', "de", "fr", "au", 'za']
-map_to_lang = {"jp":"ja", "en":"en", "eu":"en", "us":"en", "int":"en", "in":"en", "au":"en", 'za':'en'}
+source_langs = ["jp", "cn", "br", "kr", "es", "eu", "us", "int", 'in', "de", "fr", "au", 'za', 'np']
+map_to_lang = {"jp":"ja", "en":"en", "eu":"en", "us":"en", "int":"en", "in":"en", "au":"en", 'za':'en', 'np':'en'}
 source_langs_ori = source_langs
 parent_folder = '/mnt/hinoki/share/covid19/html'
 log_folder = '/mnt/hinoki/share/covid19/run/new-translated-files'
@@ -83,10 +83,10 @@ Pt_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_pt_en/'
 
 # anylang -> Ja
 # Ja -> is not needed
-Ja_URLs = {'za': En_Ja_URL, "au":En_Ja_URL, "br":Pt_Ja_URL, "en":En_Ja_URL, "eu":En_Ja_URL, "us":En_Ja_URL, "int":En_Ja_URL, "zh":Zh_Ja_URL, "cn":Zh_Ja_URL, "kr":Ko_Ja_URL, "fr":Fr_Ja_URL, "es": Es_Ja_URL, "de": De_Ja_URL, 'in': En_Ja_URL}
+Ja_URLs = {'np':En_Ja_URL, 'za': En_Ja_URL, "au":En_Ja_URL, "br":Pt_Ja_URL, "en":En_Ja_URL, "eu":En_Ja_URL, "us":En_Ja_URL, "int":En_Ja_URL, "zh":Zh_Ja_URL, "cn":Zh_Ja_URL, "kr":Ko_Ja_URL, "fr":Fr_Ja_URL, "es": Es_Ja_URL, "de": De_Ja_URL, 'in': En_Ja_URL}
 
 # anylang -> En
-# za, au, en, eu, us, int, in is not needed
+# np, za, au, en, eu, us, int, in is not needed
 En_URLs = {"jp": Ja_En_URL, "br":Pt_En_URL, "cn":Zh_En_URL, "kr":Ko_En_URL, "fr":Fr_En_URL, "es": Es_En_URL, "de": De_En_URL}
 
 # elastic search
