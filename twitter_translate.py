@@ -28,14 +28,6 @@ log_folder = '/mnt/hinoki/share/covid19/run/new-translated-files'
 
 source_langs = ["cn", "es", "eu", "us", "int", 'in', "kr", "jp", "de", "fr", "en", "zh", "ko"]
 
-NAME1 = 'covidtrans04'
-KEY1=
-SECRET1=
-
-NAME2 = 'covidtrans05'
-KEY2=
-SECRET2=
-
 account_list = [ (NAME1, KEY1, SECRET1), (NAME2, KEY2, SECRET2)]
 
 NAME, KEY, SECRET = account_list[account_index]
