@@ -18,7 +18,7 @@ import requests as req
 from requests_oauthlib import OAuth1
 from xml.etree.ElementTree import *
 
-source_langs = ["jp", "cn", "br", "kr", "es", "eu", "us", "int", 'in', "de", "fr", "au", 'za', 'np', 'my']
+source_langs = ['fr', 'gb', "jp", "cn", "br", "kr", "es", "eu", "us", "int", 'in', "de", "au", 'za', 'np', 'my', 'sg', 'id', 'mx', 'ru', 'af', 'it']
 source_langs_ori = source_langs
 keywords = ["COVID", "covid", "肺炎", "コロナ", "corona", "Corona", "코로나"] # En, zh, ja, fr, ko
 
@@ -30,8 +30,8 @@ gene_block_command = "/home/song/git/WWW2sf/tool/html2sf.sh -T -D /home/song/git
 
 year_month_day_hour_pattern = re.compile(".*?/(\d\d\d\d)/(\d\d)/(\d\d)-(\d\d).*")
 
-lang_index = int(sys.argv[1])
-source_langs = [source_langs[lang_index]]
+#lang_index = int(sys.argv[1])
+#source_langs = [source_langs[lang_index]]
 
 def time_priority(name: Tuple[str, str]) -> int:
     name = name[0]
@@ -84,7 +84,7 @@ def extract_source_text_xml(xml_file_name):
 
     result_list = []
     with open(xml_file_name, "r") as f:
-        soup = BeautifulSoup(f, "xml")
+        soup = BeautifulSoup(f, "lxml-xml")
 
     try:
         title = soup.find("Title").find("RawString").string
@@ -197,7 +197,6 @@ def gene_tmp(name, lang):
     meta_name = str(Path(tmp_name).with_suffix(".meta"))
     #abs_name = turn_to_abs(name, /mnt/hinoki/share/covid19)
 
-    ##fix
     #result, content_num, link_num = extract_source_text_xml(block_name)
     #percent = float(link_num+1)/float(link_num+content_num+1)
     #if (percent>0.66 and percent<0.8):
@@ -219,7 +218,6 @@ def gene_tmp(name, lang):
         command = "{} -E '{}' > '{}'".format(gene_block_command, name, block_name)
 
     try:
-        #print (command)
         os.system(command)
         result, content_num, link_num = extract_source_text_xml(block_name)
         if ('zusammengegencorona' in name):
@@ -237,26 +235,14 @@ def gene_tmp(name, lang):
         lang = lang
         keyword_flag = contain_keyword(result)
 
-        #link_page_flag = line_link_page(name)
-        #print (name)
-        #print (link_page_flag)
-        #print (content_num, link_num)
-        #if (link_page_flag==True):
-        #    content_num=1
-        #    link_num=100
         meta_info = "{} {} {} {} {} {}".format(translated_flag, timestamp, lang, content_num, link_num, keyword_flag)
 
         with open(meta_name, "w") as f:
             f.write(meta_info)
-        tot_num+=1
         with open(extract_accessed_file_list, "a+") as f:
             f.write(name.strip()+'\n')
-
-        #print ("New trans {} of lang {}".format(tot_num, lang))
-        #print ("block generated: {}".format(block_name))
-        #print ("title_main generated: {}".format(title_main_name))
-        #print ("meta generated: {}".format(meta_name))
     except:
+        print ("Error no meta info")
         with open(extract_accessed_file_list, "a+") as f:
             f.write(name.strip()+'\n')
         return
@@ -267,13 +253,13 @@ def write_to_access(names):
             f.write(name.strip()+'\n')
 
 
-limit_num = 1000
+limit_num = 300
 while (1):
     start_time = time.time()
-    tot_num = 0
     extract_accessed_files = get_accessed_files(extract_accessed_file_list)
     #print ("# in each lang: {}".format(now_num))
     for lang in source_langs:
+        print (lang)
         all_names = read_all_input_htmls_with_lang_and_site_limit(parent_folder, lang, limit_num)
         #fix
         before_filter = len(all_names)
@@ -281,7 +267,7 @@ while (1):
         after_filter = len(all_names)
 
         if (after_filter == 0):
-            time.sleep(10)
+            time.sleep(1)
             continue
         print ("Got files")
         print (after_filter)
@@ -301,6 +287,11 @@ while (1):
         for i, (name,lang) in enumerate(all_names):
             print (i, name)
             gene_tmp(name, lang)
+            #fixme
+           # try:
+           #     gene_tmp(name, lang)
+           # except:
+           #     continue
 
     end_time = time.time()
     elapsed_time = int(end_time-start_time)

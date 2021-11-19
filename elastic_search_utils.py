@@ -64,63 +64,61 @@ class ElasticSearchImporter:
         else:
             must_index_record = True
 
-        if not must_index_record:
-            return None
-
-        url_filename = f"{self.html_dir}/{region}/orig/{domain}/{path}/{timestamp_year}/{timestamp_month}/{timestamp_day_time}/{filename}.url"
-        txt_filename = f"{self.html_dir}/{region}/{self.lang}_translated/{domain}/{path}/{timestamp_year}/{timestamp_month}/{timestamp_day_time}/{filename}.txt"
-      
-        if self.logger is not None:
-            self.logger.debug(f"record_id={record_id} url_filename={url_filename} txt_filename={txt_filename}")
-
-        if not os.path.isfile(url_filename):
+        if must_index_record:
+            url_filename = f"{self.html_dir}/{region}/orig/{domain}/{path}/{timestamp_year}/{timestamp_month}/{timestamp_day_time}/{filename}.url"
+            txt_filename = f"{self.html_dir}/{region}/{self.lang}_translated/{domain}/{path}/{timestamp_year}/{timestamp_month}/{timestamp_day_time}/{filename}.txt"
+          
             if self.logger is not None:
-                self.logger.info(f"url_file {url_filename} not found so skip it.")
-            return None
+                self.logger.debug(f"record_id={record_id} url_filename={url_filename} txt_filename={txt_filename}")
 
-        if not os.path.isfile(txt_filename):
+            if not os.path.isfile(url_filename):
+                if self.logger is not None:
+                    self.logger.info(f"url_file {url_filename} not found so skip it.")
+                return None
+
+            if not os.path.isfile(txt_filename):
+                if self.logger is not None:
+                    self.logger.info(f"txt_file {txt_filename}is not found so skip it.")
+                return None
+
+            with open(url_filename, encoding='utf-8') as url_file:
+                url = url_file.read()
+
+            with open(txt_filename, encoding='utf-8') as text_file:
+                text = text_file.read()
+
+            record = {
+                'text': text,
+                'region': region,
+                'domain': domain,
+                'path': path,
+                'timestamp': {
+                    'year': int(timestamp_year),
+                    'month': int(timestamp_month),
+                    'day': int(timestamp_day),
+                    'hh': int(timestamp_hh),
+                    'mm': int(timestamp_mm),
+                    'local': timestamp_local,
+                    'utc': timestamp_utc
+                },
+                'filename': filename,
+                'url': url
+            }
+            if is_data_stream:
+                record['@timestamp'] = timestamp_utc
+
             if self.logger is not None:
-                self.logger.info(f"txt_file {txt_filename}is not found so skip it.")
-            return None
+                self.logger.debug(f"ES Record: id={record_id} content={record}")
+            try:
+                res = self.es.index(index=index, id=record_id, body=record, op_type="create" if is_data_stream else "index")
+                if self.logger is not None:
+                    self.logger.debug(f"Response for es.index(id={record_id}) -> {res}")
+            except TransportError as te:
+                if self.logger is not None:
+                    self.logger.info(f"An error has occurred when indexing record with id={record_id}: {te}")
+                return None
 
-        with open(url_filename, encoding='utf-8') as url_file:
-            url = url_file.read()
-
-        with open(txt_filename, encoding='utf-8') as text_file:
-            text = text_file.read()
-
-        record = {
-            'text': text,
-            'region': region,
-            'domain': domain,
-            'path': path,
-            'timestamp': {
-                'year': int(timestamp_year),
-                'month': int(timestamp_month),
-                'day': int(timestamp_day),
-                'hh': int(timestamp_hh),
-                'mm': int(timestamp_mm),
-                'local': timestamp_local,
-                'utc': timestamp_utc
-            },
-            'filename': filename,
-            'url': url
-        }
-        if is_data_stream:
-            record['@timestamp'] = timestamp_utc
-
-        if self.logger is not None:
-            self.logger.debug(f"ES Record: id={record_id} content={record}")
-        try:
-            res = self.es.index(index=index, id=record_id, body=record, op_type="create" if is_data_stream else "index")
-            if self.logger is not None:
-                self.logger.debug(f"Response for es.index(id={record_id}) -> {res}")
-        except TransportError as te:
-            if self.logger is not None:
-                self.logger.info(f"An error has occurred when indexing record with id={record_id}: {te}")
-            return None
-
-        return record_id
+            return record_id
 
 class ElasticSearchTwitterImporter:
 
@@ -218,4 +216,5 @@ class ElasticSearchTwitterImporter:
             return None
 
         return record_id
+
 

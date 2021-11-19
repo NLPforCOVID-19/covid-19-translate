@@ -1,4 +1,4 @@
-# usage here: https://github.com/Alir3z4/html2text/blob/master/docs/usage.md
+# usag here: https://github.com/Alir3z4/html2text/blob/master/docs/usage.md
 from typing import List, Tuple
 import os
 import sys
@@ -25,8 +25,8 @@ account_index = int(sys.argv[1])
 tolang = sys.argv[2]
 
 # constant
-source_langs = ["jp", "cn", "br", "kr", "es", "eu", "us", "int", 'in', "de", "fr", "au", 'za', 'np', 'my']
-map_to_lang = {"jp":"ja", "en":"en", "eu":"en", "us":"en", "int":"en", "in":"en", "au":"en", 'za':'en', 'np':'en', 'my':'id'}
+source_langs = ["jp", "cn", "br", "kr", "mx", "eu", "us", "my", "int", 'in', "de", "au", 'za', 'np','sg', 'gb', 'id', "fr", "ru", "af", "it"]
+map_to_lang = {"jp":"ja", "en":"en", "eu":"en", "us":"en", "int":"en", "in":"en", "au":"en", 'za':'en', 'np':'en', 'my':'id', 'sg':'en', 'gb':'en', 'id':'id', 'mx':'es', "ru":"ru", "af":"en", "it":"it"}
 source_langs_ori = source_langs
 parent_folder = '/mnt/hinoki/share/covid19/html'
 log_folder = '/mnt/hinoki/share/covid19/run/new-translated-files'
@@ -40,6 +40,9 @@ elastic_log = '/mnt/hinoki/share/covid19/run/trans_log_song/elastic_log.txt'
 
 
 # translation settings
+NAME1 = 
+KEY1=
+SECRET1=
 
 account_list = [ (NAME1, KEY1, SECRET1), (NAME2, KEY2, SECRET2), (NAME3, KEY3, SECRET3), (NAME4, KEY4, SECRET4), (NAME5, KEY5, SECRET5), (NAME6, KEY6, SECRET6)]
 account_len = len(account_list)
@@ -47,17 +50,19 @@ account_len = len(account_list)
 NAME, KEY, SECRET = account_list[account_index] 
 #source_langs = [source_langs[account_index]]
 if (account_index == 0):
-    source_langs = source_langs[0:3]
+    source_langs = source_langs[0:-1]
 elif (account_index == 1):
-    source_langs = source_langs[3:9]
+    source_langs = source_langs[-1:]
 elif (account_index == 2):
-    source_langs = source_langs[9:-2]
+    source_langs = source_langs[0:-1]
 elif (account_index == 3):
-    source_langs = source_langs[-2:]
+    source_langs = source_langs[-1:]
 elif (account_index == 4):
-    source_langs = source_langs[0:6]
-elif (account_index == 5):
-    source_langs = source_langs[6:]
+    source_langs = source_langs[4:5]
+#elif (account_index == 4):
+#    source_langs = source_langs[0:7]
+#elif (account_index == 5):
+#    source_langs = source_langs[7:]
 print (source_langs)
 
 consumer = OAuth1(KEY, SECRET)
@@ -71,6 +76,8 @@ Es_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_es_ja/'
 De_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_de_ja/'
 Pt_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_pt_ja/'
 Id_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_id_ja/'
+Ru_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_ru_ja/'
+It_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_it_ja/'
 
 # anylang -> En
 Ja_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_ja_en/'
@@ -81,18 +88,20 @@ Es_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_es_en/'
 De_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_de_en/'
 Pt_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_pt_en/'
 Id_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_id_en/'
+Ru_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_ru_en/'
+It_En_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_it_en/'
 
 # anylang -> Ja
 # Ja -> is not needed
-Ja_URLs = {'np':En_Ja_URL, 'za': En_Ja_URL, "au":En_Ja_URL, "br":Pt_Ja_URL, "en":En_Ja_URL, "eu":En_Ja_URL, "us":En_Ja_URL, "int":En_Ja_URL, "zh":Zh_Ja_URL, "cn":Zh_Ja_URL, "kr":Ko_Ja_URL, "fr":Fr_Ja_URL, "es": Es_Ja_URL, "de": De_Ja_URL, 'in': En_Ja_URL, 'id':Id_Ja_URL}
+Ja_URLs = {'np':En_Ja_URL, 'za': En_Ja_URL, "au":En_Ja_URL, "br":Pt_Ja_URL, "en":En_Ja_URL, "eu":En_Ja_URL, "sg": En_Ja_URL, "gb":En_Ja_URL, "us":En_Ja_URL, "int":En_Ja_URL, "zh":Zh_Ja_URL, "cn":Zh_Ja_URL, "kr":Ko_Ja_URL, "fr":Fr_Ja_URL, "es": Es_Ja_URL, "de": De_Ja_URL, 'in': En_Ja_URL, 'my':Id_Ja_URL, 'id':Id_Ja_URL, 'mx':Es_Ja_URL, "ru":Ru_Ja_URL, "af":En_Ja_URL, 'it':It_Ja_URL}
 
 # anylang -> En
 # np, za, au, en, eu, us, int, in is not needed
-En_URLs = {"jp": Ja_En_URL, "br":Pt_En_URL, "cn":Zh_En_URL, "kr":Ko_En_URL, "fr":Fr_En_URL, "es": Es_En_URL, "de": De_En_URL, 'id':Id_Ja_URL}
+En_URLs = {"jp": Ja_En_URL, "br":Pt_En_URL, "cn":Zh_En_URL, "kr":Ko_En_URL, "fr":Fr_En_URL, "es": Es_En_URL, "de": De_En_URL, 'my':Id_En_URL, 'id':Id_En_URL, 'mx':Es_En_URL, "ru":Ru_En_URL, 'it':It_En_URL}
 
 # elastic search
 #es_host = 'basil201'
-es_host = 'basil501'
+es_host = 'basil505'
 es_port = 9200
 es_ja_index = 'covid19-pages-ja'
 es_en_index = 'covid19-pages-en'
@@ -224,6 +233,7 @@ def get_accessed_files(accessed_file_list):
     for line in lines:
         line = line.strip()
         if (len(line.split(' '))!=3):
+            print ("get accessed files error, split!=3", line)
             continue
         file_name, lang, status = line.split(' ')
         all_names.append((file_name, lang))
@@ -289,6 +299,8 @@ def get_unaccessed_tmp_content(parent_folder):
     #all_tmp_content = read_tmp_folder(parent_folder) # (path_to_tmp_content_file, lang)
     all_tmp_content = read_tmp_list(tmp_list) # (path_to_tmp_content_file, lang)
     all_tmp_content = [name for name in all_tmp_content if (get_lang(name) in source_langs)]
+
+
     accessed_files = get_accessed_files(accessed_file_list)
     accessed_files_dic = {}
     for name in accessed_files:
@@ -307,13 +319,26 @@ def get_unaccessed_tmp_with_lang_site_limit(parent_folder, lang, limit_num) -> L
 
     all_tmp_content = read_tmp_list(tmp_list) # (path_to_tmp_content_file, lang)
     all_tmp_content = [name for name in all_tmp_content if (get_lang(name) ==lang)]
+
     accessed_files = get_accessed_files(accessed_file_list)
     accessed_files_dic = {}
     for name in accessed_files:
         accessed_files_dic[name[0]]=1
+
     unaccessed_tmp = [name for name in all_tmp_content if accessed_files_dic.get(name, 0) == 0]
     unaccessed_tmp = [str(Path(source2tmp(name)).with_suffix(".title_main")) for name in unaccessed_tmp]
     unaccessed_tmp.reverse()
+
+    ## example test
+    #tst = '/mnt/hinoki/share/covid19/html/my/orig/bundle.my/covid-19.moh.gov.my/terkini/tag:YB%20Menteri%20Kesihatan/2021/04/04-07-36/tag:YB%20Menteri%20Kesihatan.html'
+    #if (accessed_files_dic.get(tst) == 1):
+    #    print ("accessed")
+    #else:
+    #    print ("Not accessed")
+    #if (tst not in all_tmp_content):
+    #    print ("Error, tst not in content")
+    #print (len(unaccessed_tmp))
+    #exit()
 
     filtered_tmp = []
     site_num = {}
@@ -393,6 +418,7 @@ def save_result(output_text, target_txt):
         res = es_importer.update_record(target_txt, index=es_doc_index, is_data_stream=True)
         output_line = "{} {}".format(target_txt.strip(), res)
     except:
+        print ("translation elastic error")
         output_line = "{} {}".format(target_txt.strip(), 'error')
     with open(elastic_log, "a+") as f:
         f.write(output_line+'\n')
@@ -424,10 +450,12 @@ def write_to_accessed_line(source_html, lang, status):
         line = "{} {} {}".format(source_html, lang, status)
         f.write(line.strip()+'\n')
 
-def translate_all(unaccessed_tmp_content):
+
+
+def process_all(unaccessed_tmp_content):
     global parent_folder
     for tmp_content in unaccessed_tmp_content:
-
+        write_num = 0
         tmp_meta = str(Path(tmp_content).with_suffix(".meta"))
         source_html = tmp2source(tmp_content)
         lang = get_lang(source_html)
@@ -466,11 +494,12 @@ def translate_all(unaccessed_tmp_content):
             write_to_accessed_line(source_html, lang, status)
             continue
         #elif (float(content_num+1)/float(content_num+link_num+1)<0.33):
-        elif (float(content_num+1)/float(content_num+link_num+1)<0.2):
+        if (float(content_num+1)/float(content_num+link_num+1)<0.2) and ('/my/' not in source_html) :
             status = 2
             print ("many links")
             #print (tmp_content)
             write_to_accessed_line(source_html, lang, status)
+            continue
 
         if (status == 0):
             output_text, status = translate_one(tmp_content, lang)
@@ -491,8 +520,10 @@ def translate_all(unaccessed_tmp_content):
             log_file_base = "{}-{:04d}-{:02d}-{:02d}-{:02d}-{:02d}.txt".format(log_file_base_lang, year, month, day, hour, minute)
             log_file  = "{}/{}".format(log_folder, log_file_base)
             with open(log_file, "a+") as f:
+                write_num += 1
                 f.write(target_html.strip()+'\n')
             print ("Output: {}".format(target_txt))
+
 
 def revise_meta(parent_folder):
     keyword_false = 0
@@ -560,15 +591,20 @@ elif (tolang == 'en'):
     loc_phrase = "en_translated"
     log_file_base_lang = "new-translated-files-en"
 
-print (tolang, accessed_file_list)
 max_trans_page = 1000 
 epoch_trans_page = 100 
 limit_each_site = 5 # in each iteration translate only 10
 while (1):
     for lang in source_langs:
-        print ("Begin loop")
+        #print ("Begin loop")
         unaccessed_tmp_content = get_unaccessed_tmp_with_lang_site_limit(parent_folder, lang, limit_each_site)
+
         print (lang, len(unaccessed_tmp_content))
+        if (len(unaccessed_tmp_content)>0):
+            year, month, day, hour, minute=my_get_time()
+            print ("Date: {}/{} {}:{}".format(month, day, hour, minute))
+            print (lang, len(unaccessed_tmp_content))
+            process_all(unaccessed_tmp_content)
         #if (len(unaccessed_tmp_content)>max_trans_page*1.5):
         #    unaccessed_tmp_content.sort(key = lambda x: priority(x))
         #    old_tmp = unaccessed_tmp_content[max_trans_page:]
@@ -584,6 +620,5 @@ while (1):
         #    unaccessed_tmp_content = unaccessed_tmp_content[:epoch_trans_page]
         #r=len(unaccessed_tmp_content)
         
-        translate_all(unaccessed_tmp_content)
 
     time.sleep(1)

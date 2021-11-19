@@ -26,13 +26,22 @@ en_accessed_file_list = '/mnt/hinoki/share/covid19/run/trans_log_song/en_tweet_t
 ja_accessed_file_list = '/mnt/hinoki/share/covid19/run/trans_log_song/ja_tweet_trans_list.txt'
 log_folder = '/mnt/hinoki/share/covid19/run/new-translated-files'
 
-source_langs = ["cn", "es", "eu", "us", "int", 'in', "kr", "jp", "de", "fr", "en", "zh", "ko"]
+
+NAME1 = 'covidtrans04'
+KEY1='460bd37b0dc0c2955226ec0ed289dfc006008f903'
+SECRET1='0c134e70959ef59f25e83064922014e1'
+
+NAME2 = 'covidtrans05'
+KEY2='cc0a99c62d5e8048758cb5a4fff147ad06008f92f'
+SECRET2='2b1afef195ac8917df8d94835f7daaf6'
 
 account_list = [ (NAME1, KEY1, SECRET1), (NAME2, KEY2, SECRET2)]
 
 NAME, KEY, SECRET = account_list[account_index]
 
 consumer = OAuth1(KEY, SECRET)
+
+source_langs = ["cn", "es", "eu", "us", "int", 'in', "kr", "jp", "de", "fr", "en", "zh", "ko"]
 # anylang -> Ja
 En_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_en_ja/'
 Zh_Ja_URL = 'https://mt-auto-minhon-mlt.ucri.jgn-x.jp/api/mt/generalNT_zh-CN_ja/'
@@ -272,7 +281,7 @@ def translate_file(name):
         os.makedirs(translated_folder, exist_ok=True)
     except:
         status = 1
-        write_to_accessed_line(orig_html, country, status)
+        write_to_accessed_line(orig_html, status)
         return
 
     line = open(orig_json, "r").readline()
@@ -281,9 +290,11 @@ def translate_file(name):
     lang = json_line['lang']
     #text = json_line['text']
     text = get_text_from_html(orig_html)
+    print ("Input file: {}".format(name))
+    print ("Input text: {}".format(text))
     if (text == ""):
         status = 1
-        write_to_accessed_line(orig_html, country, status)
+        write_to_accessed_line(orig_html, status)
         return
 
     text = save_hashtag_url(text)
@@ -291,15 +302,11 @@ def translate_file(name):
     # FIXME
     translated_text = translator_part(text, lang)
     translated_text = start_newlines + translated_text + end_newlines
-    print ("Begin")
-    print (text)
-    print (translated_text)
     status = save_result(translated_text, translated_txt)
-    print (status)
 
     #orig_text =text
 
-    write_to_accessed_line(orig_html, country, status)
+    write_to_accessed_line(orig_html, status)
     year, month, day, hour, minute = my_get_time()
     minute = 0
     log_file_base = "{}-{:04d}-{:02d}-{:02d}-{:02d}-{:02d}.txt".format(log_file_base_lang, year, month, day, hour, minute)
@@ -326,6 +333,7 @@ while (1):
     extracted_files = get_extracted_files(extract_accessed_file_list)
     translated_files = get_translated_files(accessed_file_list)
     under_translated_files = [name for (name, _) in extracted_files.items() if translated_files.get(name, 0)==0]
+    print (len(under_translated_files))
     under_translated_files = under_translated_files[-1000:]
     if (len(under_translated_files)==0):
         time.sleep(10)
@@ -342,6 +350,7 @@ while (1):
         except:
             print ("translate file whole error", name)
             write_to_accessed_line(name, 1)
+            exit()
             continue
 
     time.sleep(10)
