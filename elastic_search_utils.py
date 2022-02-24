@@ -3,7 +3,6 @@ from dateutil import tz
 from elasticsearch import Elasticsearch, TransportError
 import os
 
-
 def datetime_from_iso_format(str_timestamp):
     date_str = str_timestamp[:10]
     time_str = str_timestamp[11:]
@@ -11,9 +10,7 @@ def datetime_from_iso_format(str_timestamp):
     hh, mm, ss = time_str.split(':')
     return datetime(int(year), int(month), int(day), int(hh), int(mm), int(ss))
 
-
 class ElasticSearchImporter:
-
     def __init__(self, host, port, html_dir, lang, logger=None):
         self.html_dir = html_dir
         self.lang = lang

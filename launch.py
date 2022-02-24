@@ -26,7 +26,6 @@ from classifiers.bertsimple import extract_meta_add_bert_info, init_bert, init_c
 
 
 gpu_num = '0'
-gpu_num2 = '2'
 batch = 32
 
 data_dir = '/mnt/hinoki/share/covid19'
@@ -114,25 +113,17 @@ def get_feature(full_name):
 def get_unprocessed_list():
     #_, country, _, domain, *url_parts = pathlib.Path(line.strip()).parts
     ja_translated_list = []
-    for line in open(ja_translated_list_file, "r").readlines():
+    ja_lines = open(ja_translated_list_file, "r").readlines()
+    for line in ja_lines:
         line_list = line.strip().split()
-        if (len(line_list)<3):
-            with open("error.log", "w") as f:
-                f.write("error: {}".format(line))
-                print ("error: ", line_list)
-            continue
-        if (line_list[2]=='0'):
+        if (line_list[-1]=='0'):
             ja_translated_list.append(line_list[0])
 
     en_translated_list = []
-    for line in open(en_translated_list_file, "r").readlines():
+    en_lines = open(en_translated_list_file, "r").readlines()
+    for line in en_lines:
         line_list = line.strip().split()
-        if (len(line_list)<3):
-            with open("error.log", "w") as f:
-                f.write("error: {}".format(line))
-                print ("error: ", line_list)
-            continue
-        if (line_list[2]=='0'):
+        if (line_list[-1]=='0'):
             en_translated_list.append(line_list[0])
 
     xml_converted_list = get_xml_converted_list(xml_log_dir)
@@ -207,7 +198,9 @@ itr = 0
 while (1):
     unprocessed_list = get_unprocessed_list()
     unprocessed_len = len(unprocessed_list)
-    print (unprocessed_len)
+    print ("----------------------------------------------------")
+    print (f"Topic Classification:There are {unprocessed_len} unprocessed files")
+    print ("----------------------------------------------------")
     if (unprocessed_len == 0):
         time.sleep(10)
         continue
@@ -219,4 +212,4 @@ while (1):
             process_one_file(input_path)
         except:
             continue
-    time.sleep(10)
+    time.sleep(100)

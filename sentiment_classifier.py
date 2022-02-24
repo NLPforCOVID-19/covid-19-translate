@@ -1,3 +1,4 @@
+import gc
 import os
 import copy
 from pyknp import Juman
@@ -66,9 +67,14 @@ def extract_meta_add_sentiment(meta, model, jumanpp, tokenizer, device):
             print(f'{cls.__name__}: {e.with_traceback(tb)}')
     meta["sentiment"] = score
 
+def get_input(input_file):
+    lines = open(input_file, 'r', errors='ignore').readlines()
+    return lines 
+
 def get_processed_dict(accessed_list):
     classified_dict = {} 
-    for line in open(accessed_list, "r").readlines():
+    lines = open(accessed_list, 'r').readlines()
+    for line in lines: 
         try:
             res = line.strip().split()[0]
             classified_dict[res] = 1
@@ -88,11 +94,6 @@ def read_output_file(file_path):
         extract_meta_add_sentiment(meta, model, jumanpp, tokenizer, device)
         save_sentiment_meta(meta, output_file)
 
-def get_input(input_file):
-    # in the reversed order, return iter
-    #lines = reversed(open(input_file, 'r').readlines())
-    lines = open(input_file, 'r', errors='ignore').readlines()
-    return lines 
 
 def check_unprocessed(meta, processed_dict):
     link = os.path.join('/mnt/hinoki/share/covid19/', meta['orig']['file'])
@@ -125,25 +126,28 @@ if parallel:
     model = nn.DataParallel(model, sent_device_ids=list(map(int, gpu_num2.split(','))))
 jumanpp = Juman()
 
+processed_num = {}
 while (1):
+    print ("Sentiment Classification start")
     processed_dict = get_processed_dict(accessed_list)
     input_lines = get_input(input_file)
-    # input_lines = [open(input_file, 'r').readline()]
-    # print (processed_dict)
+    tot_line = len(input_lines)
     for i, input_line in enumerate(input_lines):
-        try:
-            meta = json.loads(input_line.strip())
-            link = os.path.join('/mnt/hinoki/share/covid19/', meta['orig']['file'])
-            if (check_unprocessed(meta, processed_dict)):
-                extract_meta_add_sentiment(meta, model, jumanpp, tokenizer, device)
-                print (meta['orig']['file'])
-                print (meta['sentiment'])
-                save_result(output_file, accessed_list, meta)
-        except:
-            with open("failed_line.txt", "w") as f:
-                f.write(f'{i}\n')
+        if (processed_num.get(i, 0) == 1):
             continue
-    time.sleep(100)
+        processed_num[i] = 1
+        meta = json.loads(input_line.strip())
+        link = os.path.join('/mnt/hinoki/share/covid19/', meta['orig']['file'])
+        if (check_unprocessed(meta, processed_dict)):
+            extract_meta_add_sentiment(meta, model, jumanpp, tokenizer, device)
+            print (f'Sentiment: {i} of {tot_line}')
+            print (meta['orig']['file'])
+            print (meta['sentiment'])
+            save_result(output_file, accessed_list, meta)
+    time.sleep(1000)
+    del processed_dict
+    del input_lines
+    gc.collect()
 
 #read_processed_name()
 #read_output_file()
